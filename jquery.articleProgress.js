@@ -6,6 +6,8 @@
         // This is the easiest way to have default options.
         var settings = $.extend({
             // These are the defaults.
+            container: $('.article-progress'),
+            bar: $('.article-progress .bar'),
             color: 'deeppink',
             backgroundColor: '#efefef',
             article: $('article'),
@@ -36,31 +38,32 @@
         }
 
         function checkPosition(){
-           
-            // console.log(s.article.offset().top);
-            // console.log(heights.finalHeight);
-            // console.log(heights.articleHeight);
-            // var boundary = s.article.offset().top;
             var scrolled = 0;
-            // console.log('padding: ' + s.article.css('padding-top'));
             var fixOffset = s.article.offset().top - parseInt(s.article.css('padding-top'));
-            $(window).scroll(function(heights){
-                // determineHeight(s.article);
+            
+            $(window).scroll(function(){
                 scrolled = $(window).scrollTop();
+
                 if(scrolled > fixOffset){
-                    console.log('BOUNDARY');
+                    s.container.addClass('visible');
                     determineHeight(scrolled, s.article.outerHeight());
                 }
-                
+                else{
+                    s.container.removeClass('visible');
+                }
             });
         }
 
         function determineHeight(scrolled, total){
-            // console.log(total);
             scrolled = scrolled - s.topOffset;
-            // console.log(scrolled);
             var percent = (scrolled / total) * 100;
-            console.log(percent);
+            drawBar(percent);
+        }
+
+        function drawBar(percent){
+            s.bar.css({
+                'width': percent + '%'
+            });
         }
 
         function engage(){
